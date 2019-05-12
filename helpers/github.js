@@ -17,18 +17,8 @@ let getReposByUsername = (username, cb) => {
     }
   };
   
-  // function callback(error, response, body) {
-  //   if (error) {
-  //     response.status(500).send();
-  //   } else {
-  //     response.status(200).send(body);
-  //   }
-    
-  // }
   request(options, cb)
 };
 
-console.log(jsonData)
-console.log(getReposByUsername('kszeto1'));
 
 module.exports = getReposByUsername;

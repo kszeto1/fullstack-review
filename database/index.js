@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/fetcher');
+mongoose.connect('mongodb://localhost/fetcher', {
+  useMongoClient: true,
+});
 
 // var db = mongoose.connection;
 // db.on('error', console.error.bind(console, 'connection error:'));
@@ -12,7 +14,7 @@ let repoSchema = mongoose.Schema({
   name: String,
   username: String,
   stargazers_count: Number,
-  fork_count: Number,
+  fork_count: Number
 });
 
 let Repo = mongoose.model('Repo', repoSchema);
@@ -21,10 +23,20 @@ let save = (repo) => {
   // TODO: Your code here
   // This function should save a repo or repos to
   // the MongoDB
-  console.log(repo);
-  // let newDocument = new Repo({
-  //   name: repo.
-  // })
+  let newDocument = new Repo({
+    name: repo.name,
+    username: repo.username,
+    stargazers_count: repo.stargazers_count,
+    fork_count: repo.fork_count
+  })
+
+  newDocument.save(function(err) {
+    if (err) {
+      console.log('failed to save');
+    } else {
+      console.log('successfully saved');
+    }
+  })
 }
 
 module.exports.save = save;

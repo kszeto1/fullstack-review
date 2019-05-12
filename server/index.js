@@ -1,8 +1,8 @@
 const express = require('express');
-const db = require('../database/index.js').connection;
+// const db = require('../database/index.js').connection;
 const request = require('request');
 const bodyParser = require('body-parser');
-const dbSave = require('../database/index.js').save;
+const dbSave = require('../database/index.js');
 
 // import getReposByUsername
 const getReposByUsername = require('../helpers/github.js');
@@ -26,12 +26,19 @@ app.post('/repos', function (req, res) {
   // server responds to client with successful message
 
   // callback takes input repos to send to database
-  console.log('SERVER req.body post', req.body)
   getReposByUsername(req.body.username, function(err, data) {
     if (err) {
       res.status(500).end(err);
     } else {
-      dbSave(data);
+      // console.log('data is here', data.body);
+      arrayOfObjects = JSON.parse(data.body);
+      console.log(typeof arrayOfObjects);
+      for (var i = 0; i < arrayOfObjects.length; i++) {
+        let repo = arrayOfObjects[i];
+        let repoObject = {name: repo.name, username: repo.owner.login, stargazers_count: repo.stargazers_count, fork_count: repo.forks_count}
+        // console.log('each repoObject: ', repoObject);
+        dbSave.save(repoObject);
+      }
     }
   });
 

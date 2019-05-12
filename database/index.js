@@ -14,7 +14,8 @@ let repoSchema = mongoose.Schema({
   name: String,
   username: String,
   stargazers_count: Number,
-  fork_count: Number
+  fork_count: Number,
+  html_url: String
 });
 
 let Repo = mongoose.model('Repo', repoSchema);
@@ -27,7 +28,8 @@ let save = (repo) => {
     name: repo.name,
     username: repo.username,
     stargazers_count: repo.stargazers_count,
-    fork_count: repo.fork_count
+    fork_count: repo.fork_count,
+    html_url: repo.html_url
   })
 
   newDocument.save(function(err) {
@@ -39,7 +41,21 @@ let save = (repo) => {
   })
 }
 
+// find top 25 collections from database
+// export that function
+
+let findAll = (cb) => {
+  Repo.find(function (err, docs) {
+    if (err) {
+      cb(err);
+    } else {
+      cb(null, docs);
+    }
+  })
+}
+
 module.exports.save = save;
+module.exports.findAll = findAll;
 
 
 

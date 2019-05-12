@@ -2,7 +2,7 @@ const express = require('express');
 // const db = require('../database/index.js').connection;
 const request = require('request');
 const bodyParser = require('body-parser');
-const dbSave = require('../database/index.js');
+const db = require('../database/index.js');
 
 // import getReposByUsername
 const getReposByUsername = require('../helpers/github.js');
@@ -32,12 +32,12 @@ app.post('/repos', function (req, res) {
     } else {
       // console.log('data is here', data.body);
       arrayOfObjects = JSON.parse(data.body);
-      console.log(typeof arrayOfObjects);
+      // console.log(arrayOfObjects);
       for (var i = 0; i < arrayOfObjects.length; i++) {
         let repo = arrayOfObjects[i];
-        let repoObject = {name: repo.name, username: repo.owner.login, stargazers_count: repo.stargazers_count, fork_count: repo.forks_count}
+        let repoObject = {name: repo.name, username: repo.owner.login, stargazers_count: repo.stargazers_count, fork_count: repo.forks_count, html_url: repo.html_url}
         // console.log('each repoObject: ', repoObject);
-        dbSave.save(repoObject);
+        db.save(repoObject);
       }
     }
   });
@@ -48,6 +48,15 @@ app.post('/repos', function (req, res) {
 app.get('/repos', function (req, res) {
   // TODO - your code here!
   // This route should send back the top 25 repos
+  console.log('successful get to server');
+  db.findAll(function(err, data) {
+    if (err) {
+      console.log( err);
+    } else {
+      res.status(200);
+      res.send(data);
+    }
+  });
 });
 
 let port = 3000;

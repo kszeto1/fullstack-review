@@ -2,7 +2,6 @@ const request = require('request');
 const config = require('../config.js');
 
 
-var jsonData;
 let getReposByUsername = (username, cb) => {
 //   // TODO - Use the request module to request repos for a specific
 //   // user from the github API

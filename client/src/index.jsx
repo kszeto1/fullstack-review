@@ -14,13 +14,22 @@ class App extends React.Component {
 
   }
 
+  componentDidMount() {
+    Axios.get('/repos')
+    .then((response) => {
+      console.log('RESPONSE DATA', response.data);
+      this.setState({repos: this.state.repos.concat(response.data)});
+    }).catch(function(error) {
+      console.log(error);
+    });
+  }
   search (term) {
     console.log(`${term} was searched`);
     // TODO
     Axios.post('/repos', 
     { username: term})
     .then(function(response) {
-      console.log(response);
+      console.log('response from post: ', response);
     }).catch(function(error) {
       console.log(error);
     });
